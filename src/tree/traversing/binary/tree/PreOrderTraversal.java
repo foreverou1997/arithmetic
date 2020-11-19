@@ -29,7 +29,9 @@ public class PreOrderTraversal {
         node6.right = node7;
 
         // 非递归调用
-        normalPreOrderTraversal(node4);
+        //normalPreOrderTraversal(node4);
+        // 递归调用
+        recursionPreOrderTraversal(node4);
     }
 
     /**
@@ -50,5 +52,19 @@ public class PreOrderTraversal {
 
         }
     }
-    
+
+
+    /**
+     * 递归实现
+     */
+    public static  void recursionPreOrderTraversal(TreeNode node){
+        System.out.println(node.val);
+        if (node.left != null){
+            recursionPreOrderTraversal(node.left);
+        }
+        if (node.right != null){
+            recursionPreOrderTraversal(node.right);
+        }
+    }
+
 }
