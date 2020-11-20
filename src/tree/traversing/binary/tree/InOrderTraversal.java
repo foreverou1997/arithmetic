@@ -6,9 +6,9 @@ import java.util.Stack;
 
 /**
  * @author oulei
- * 二叉树前序遍历 -- 根左右
+ * 二叉树中序遍历 -- 左根右
  */
-public class PreOrderTraversal {
+public class InOrderTraversal {
 
     public static void main(String[] args) {
         TreeNode node1 = new TreeNode(1);
@@ -29,42 +29,42 @@ public class PreOrderTraversal {
         node6.right = node7;
 
         // 非递归调用
-        // normalPreOrderTraversal(node4);
+        // normalInOrderTraversal(node4);
         // 递归调用
-        recursionPreOrderTraversal(node4);
+        recursionInOrderTraversal(node4);
     }
 
     /**
-     * 非递归形式
+     * 非递归遍历
      */
-    public  static void normalPreOrderTraversal(TreeNode root){
+    public  static  void normalInOrderTraversal(TreeNode node){
         Stack<TreeNode> stack = new Stack<>();
-        TreeNode node = root;
-        while (node != null || stack.size() > 0){
-            if (node != null){
-                System.out.println(node.val);
-                stack.push(node);
-                node = node.left;
-            }else {
-                TreeNode tem = stack.pop();
-                node = tem.right;
-            }
+       while (node != null || stack.size() > 0){
+           if (node != null){
+               stack.push(node);
+               node = node.left;
+           }else{
+               TreeNode tem = stack.pop();
+               System.out.println(tem.val);
+               node = tem.right;
+           }
 
-        }
+       }
     }
 
 
     /**
-     * 递归实现
+     * 递归遍历
      */
-    public static  void recursionPreOrderTraversal(TreeNode node){
-        System.out.println(node.val);
+    public static  void recursionInOrderTraversal(TreeNode node){
         if (node.left != null){
-            recursionPreOrderTraversal(node.left);
+            recursionInOrderTraversal(node.left);
         }
+        System.out.println(node.val);
         if (node.right != null){
-            recursionPreOrderTraversal(node.right);
+            recursionInOrderTraversal(node.right);
         }
+
     }
 
 }
