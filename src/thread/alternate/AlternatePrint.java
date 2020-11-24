@@ -12,43 +12,50 @@ public class AlternatePrint {
     public static  Thread b = null;
     public static Object object = new Object();
 
-    public static void main(String[] args) {
-        notifyAndWait();
+    public static void main(String[] args) throws InterruptedException {
+        // notifyAndWait();
+        lockSupport();
     }
 
 
 
-    public  static  void notifyAndWait(){
+    public  static  void notifyAndWait() throws InterruptedException {
         char [] dataOne = "123456".toCharArray();
         char [] dataTwo = "ABCDEF".toCharArray();
         a = new Thread(()->{
-            for (char val : dataOne){
-                synchronized (object){
-                    try {
-                        System.out.println(val);
-                        object.notify();
-                        object.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+            synchronized (object){
+                for (char val : dataOne){
+                        try {
+                            System.out.println(val);
+                            object.notify();
+                            object.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
+                // 使程序可以正常结束
+                object.notify();
             }
         });
+
         b = new Thread(()->{
-            for (char val : dataTwo) {
-                synchronized (object){
-                    try {
-                        object.wait();
-                        System.out.println(val);
-                        object.notify();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+            synchronized (object){
+                for (char val : dataTwo) {
+                        try {
+                            System.out.println(val);
+                            object.notify();
+                            object.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
+                // 使程序可以正常结束
+                object.notify();
             }
         });
 
         a.start();
+        Thread.sleep(1000);
         b.start();
     }
 
@@ -57,7 +64,7 @@ public class AlternatePrint {
     /**
      * LockSupport方式
      */
-    public  static  void  lockSupport(){
+    public  static  void  lockSupport() throws InterruptedException {
         char [] dataOne = "123456".toCharArray();
         char [] dataTwo = "ABCDEF".toCharArray();
         a = new Thread(()->{
@@ -66,16 +73,21 @@ public class AlternatePrint {
                     LockSupport.unpark(b);
                     LockSupport.park();
                 }
+            // 让程序结束
+            LockSupport.unpark(b);
         });
         b = new Thread(()->{
             for (char val : dataTwo) {
-                LockSupport.park();
                 System.out.println(val);
                 LockSupport.unpark(a);
+                LockSupport.park();
             }
+            // 让程序结束
+            LockSupport.unpark(a);
         });
 
         a.start();
+        Thread.sleep(1000);
         b.start();
     }
 
