@@ -18,7 +18,9 @@ public class AlternatePrint {
     }
 
 
-
+    /**
+     * wait notify 方式
+     */
     public  static  void notifyAndWait() throws InterruptedException {
         char [] dataOne = "123456".toCharArray();
         char [] dataTwo = "ABCDEF".toCharArray();
